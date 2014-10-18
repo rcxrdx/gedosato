@@ -10,9 +10,11 @@ class TimeManager : boost::noncopyable {
 	static TimeManager instance;
 
 	bool frozen = false;
-	LARGE_INTEGER perfCounterAtFreeze{ { 0 } };
+	LARGE_INTEGER perfCounterAtFreeze;
 
 public:
+	TimeManager() { perfCounterAtFreeze.QuadPart = 0;  }
+
 	static TimeManager& get() {
 		return instance;
 	}
