@@ -16,7 +16,7 @@ How do I use it? (INSTALLATION & USAGE INSTRUCTIONS)
 2) Run GeDoSaToTool.exe *as Administrator* (you can use this to perform the following steps)
 3) Adjust the settings in config/GeDoSaTo.ini and config/GeDoSaToKeys.ini as desired
    - you can also store game-specific setting overrides, see "config/Blackguards" as an example
-4) [optional] Add your game executable names to "whitelist.txt" in the "assets" folder 
+4) [optional] Add your game executable names to "whitelist.txt" in the "config" folder 
    (Dark Souls 2 and a few others are already included!)
 5) Select the downsampling resolution in-game if you want to use downsampling
 
