@@ -84,9 +84,12 @@ GENERATE_INTERCEPT_HEADER(LoadLibraryW, HMODULE, WINAPI, _In_ LPCWSTR lpLibFileN
 
 	if(preventDllLoading(std::wstring(lpLibFileName), true)) return NULL;
 
+	std::wstring fileName = std::wstring(lpLibFileName);
+	std::string bName = std::string(fileName.begin(), fileName.end());
+
 	HMODULE mod = TrueLoadLibraryW(lpLibFileName);
 	// restart detour in case we missed anything
-	if(mod) restartDetour(CW2A(lpLibFileName));
+	if (mod) restartDetour(bName.c_str());
 	return mod;
 }
 
@@ -104,16 +107,18 @@ GENERATE_INTERCEPT_HEADER(LoadLibraryExA, HMODULE, WINAPI, _In_ LPCSTR lpLibFile
 	return mod;
 }
 GENERATE_INTERCEPT_HEADER(LoadLibraryExW, HMODULE, WINAPI, _In_ LPCWSTR lpLibFileName, _Reserved_ HANDLE hFile, _In_ DWORD dwFlags) {
-	SDLOG(22, "DetouredLoadLibraryExW %s\n", CW2A(lpLibFileName));
+	std::wstring fileName = std::wstring(lpLibFileName);
+	std::string fn = std::string(fileName.begin(), fileName.end());
+	
+	SDLOG(22, "DetouredLoadLibraryExW %s\n", fn);
 
-	string fn((CW2A(lpLibFileName)));
 	if(fn.find("GeDoSaTo") != fn.npos) return GetCurrentModule(); // find out why we need this
 
 	if(preventDllLoading(std::wstring(lpLibFileName), true)) return NULL;
 
 	HMODULE mod = TrueLoadLibraryExW(lpLibFileName, hFile, dwFlags);
 	// restart detour in case we missed anything
-	if(mod) restartDetour(CW2A(lpLibFileName));
+	if (mod) restartDetour(fn.c_str());
 	return mod;
 }
 
@@ -247,7 +252,10 @@ GENERATE_INTERCEPT_HEADER(EnumDisplaySettingsExA, BOOL, WINAPI, _In_ LPCTSTR lps
 	return DetouredEnumDisplaySettingsTemplate(lpszDeviceName, iModeNum, lpDevMode, dwFlags, TrueEnumDisplaySettingsExA);
 }
 GENERATE_INTERCEPT_HEADER(EnumDisplaySettingsExW, BOOL, WINAPI, _In_ LPCWSTR lpszDeviceName, _In_ DWORD iModeNum, _Out_ DEVMODEW *lpDevMode, _In_ DWORD dwFlags) {
-	SDLOG(2, "EnumDisplaySettingsExW %s -- %u\n", lpszDeviceName ? CW2A(lpszDeviceName) : "NULL", iModeNum);
+	std::wstring deviceName = std::wstring(lpszDeviceName);
+	std::string bName = std::string(deviceName.begin(), deviceName.end());
+	
+	SDLOG(2, "EnumDisplaySettingsExW %s -- %u\n", lpszDeviceName ? bName.c_str() : "NULL", iModeNum);
 	return DetouredEnumDisplaySettingsTemplate(lpszDeviceName, iModeNum, lpDevMode, dwFlags, TrueEnumDisplaySettingsExW);
 }
 

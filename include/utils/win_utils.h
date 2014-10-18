@@ -4,8 +4,6 @@
 #pragma warning (disable : 4005)
 #define _USING_V110_SDK71_
 #include <windows.h>
-#include <atlbase.h>
-#include <atlconv.h>
 #include <mmsystem.h>
 #include <Psapi.h>
 #pragma warning(pop)
